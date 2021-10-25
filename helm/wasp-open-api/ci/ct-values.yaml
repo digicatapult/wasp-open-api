@@ -1,0 +1,32 @@
+config:
+  paths:
+    - http://wasp-open-api-apidocsmockone:80/api-docs
+    - http://wasp-open-api-apidocsmocktwo:80/api-docs
+image:
+  repository: 'wasp-open-api'
+  tag: 'latest'
+  PullPolicy: Never
+apidocsmock:
+  enabled: true
+apidocsmockone:
+  service:
+    type: ClusterIP
+  serverBlock: |-
+    server {
+      listen 0.0.0.0:8080;
+      location /api-docs {
+        add_header Content-Type "application/json";
+        return 200 "{\"openapi\":\"3.0.3\",\"info\":{\"title\":\"Mock 1\",\"version\":\"0.0.1\"},\"paths\":{\"/thing\":{\"parameters\":[],\"get\":{\"summary\":\"Get things\",\"tags\":[\"thing\"]}}}}";
+      }
+    }
+apidocsmocktwo:
+  service:
+    type: ClusterIP
+  serverBlock: |-
+    server {
+      listen 0.0.0.0:8080;
+      location /api-docs {
+        add_header Content-Type "application/json";
+        return 200 "{\"openapi\":\"3.0.3\",\"info\":{\"title\":\"Mock 2\",\"version\":\"0.0.1\"},\"paths\":{\"/token\":{\"parameters\":[],\"get\":{\"summary\":\"Get authorization token\",\"tags\":[\"auth\"]}}}}";
+      }
+    }

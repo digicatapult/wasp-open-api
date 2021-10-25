@@ -1,7 +1,7 @@
 {
-  "name": "@digicatapult/wasp-service-template",
-  "version": "0.0.6",
-  "description": "Service for WASP",
+  "name": "@digicatapult/wasp-open-api",
+  "version": "0.0.5",
+  "description": "Amalgamated API specs for WASP",
   "main": "app/index.js",
   "scripts": {
     "test": "NODE_ENV=test mocha --config ./test/mocharc.js ./test",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/digicatapult/wasp-service-template.git"
+    "url": "git+https://github.com/digicatapult/wasp-open-api.git"
   },
   "engines": {
     "node": ">=14.16.0"
@@ -24,15 +24,17 @@
   "author": "Digital Catapult",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/digicatapult/wasp-service-template/issues"
+    "url": "https://github.com/digicatapult/wasp-open-api/issues"
   },
-  "homepage": "https://github.com/digicatapult/wasp-service-template#readme",
+  "homepage": "https://github.com/digicatapult/wasp-open-api#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "envalid": "^7.0.0",
     "express": "^4.17.1",
     "pino": "^6.11.1",
-    "pino-http": "^5.5.0"
+    "pino-http": "^5.5.0",
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "chai": "^4.3.1",
@@ -40,7 +42,7 @@
     "eslint": "^7.21.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "mocha": "^9.1.2",
+    "mocha": "^8.3.0",
     "nodemon": "^2.0.7",
     "nyc": "^15.1.0",
     "pino-colada": "^2.1.0",

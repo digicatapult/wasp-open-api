@@ -1,0 +1,46 @@
+{{- $prepend  := .Values.config.prepend -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "wasp-open-api.fullname" . }}-config
+  labels: {{- include "wasp-open-api.labels" . | nindent 4 }}
+data:
+  port: {{ .Values.config.port | quote }}
+  logLevel: {{ .Values.config.logLevel }}
+  apiDocsFilePath: {{ .Values.config.apiDocsFilePath }}
+  openapi-merge.yaml: |
+    {{- if .Values.config.enabled }}
+    inputs:
+    - inputFile: base.json
+    {{- range .Values.config.paths }}
+    - inputURL: {{ . }}
+    {{- if (not (empty $prepend)) }}
+      pathModification:
+        prepend: {{ $prepend  }}
+    {{- end }}
+    {{- end }}
+    output: {{ .Values.config.output }}
+    {{- end }}
+  base.json: |
+    {
+      "openapi": "3.0.3",
+      "info": {
+        "title": "WASP Open API",
+        "version": "0.0.1"
+      },
+      "servers": [
+        {
+          "url": {{ .Values.config.baseUrl | quote }}
+        }
+      ],
+      "components": {
+        "securitySchemes": {
+          "BearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+          }
+        }
+      },
+      "security": [{ "BearerAuth": [] }]
+    }

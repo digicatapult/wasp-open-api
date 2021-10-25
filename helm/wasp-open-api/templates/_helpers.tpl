@@ -1,7 +1,7 @@
 {{/*
 Create name to be used with deployment.
 */}}
-{{- define "wasp-service-template.fullname" -}}
+{{- define "wasp-open-api.fullname" -}}
     {{- if .Values.fullnameOverride -}}
         {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
     {{- else -}}
@@ -10,30 +10,30 @@ Create name to be used with deployment.
         {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
       {{- else -}}
         {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-      {{- end -}}    
+      {{- end -}}
     {{- end -}}
 {{- end -}}
 
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "wasp-service-template.chart" -}}
+{{- define "wasp-open-api.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Selector labels
 */}}
-{{- define "wasp-service-template.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "wasp-service-template.fullname" . }}
+{{- define "wasp-open-api.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "wasp-open-api.fullname" . }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "wasp-service-template.labels" -}}
-helm.sh/chart: {{ include "wasp-service-template.chart" . }}
-{{ include "wasp-service-template.selectorLabels" . }}
+{{- define "wasp-open-api.labels" -}}
+helm.sh/chart: {{ include "wasp-open-api.chart" . }}
+{{ include "wasp-open-api.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -43,7 +43,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Conditionally populate imagePullSecrets if present in the context
 */}}
-{{- define "wasp-service-template.imagePullSecrets" -}}
+{{- define "wasp-open-api.imagePullSecrets" -}}
   {{- if (not (empty .Values.image.pullSecrets)) }}
 imagePullSecrets:
     {{- range .Values.image.pullSecrets }}

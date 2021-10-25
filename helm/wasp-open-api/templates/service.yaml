@@ -1,0 +1,14 @@
+{{- $fullName := include "wasp-open-api.fullname" . -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: wasp-open-api
+  labels:
+    {{- include "wasp-open-api.labels" . | nindent 4 }}
+spec:
+  selector:
+    name: {{ include "wasp-open-api.fullname" . }}
+  ports:
+    - protocol: 'TCP'
+      port: {{ .Values.config.servicePort }}
+      targetPort: {{ .Values.config.port }}

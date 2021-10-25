@@ -1,0 +1,58 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "wasp-open-api.fullname" . }}-cron
+  labels:
+    {{- include "wasp-open-api.labels" . | nindent 4 }}
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          annotations:
+            checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+          labels:
+            name: {{ include "wasp-open-api.fullname" . }}
+        spec:
+          restartPolicy: OnFailure
+          volumes:
+            - name: config
+              configMap:
+                name: {{ include "wasp-open-api.fullname" . }}-config
+            - name: output
+              emptyDir: {}
+
+          initContainers:      
+            - name: {{ .Chart.Name }}-init
+              image: node
+              imagePullPolicy: IfNotPresent
+              command: ['sh', '-c', 'npx openapi-merge-cli --config /etc/openapi-merge-cli/openapi-merge.yaml']
+              env:
+                - name: npm_config_cache
+                  value: "/tmp/.npm"
+              volumeMounts:
+                - name: config
+                  mountPath: /etc/openapi-merge-cli/openapi-merge.yaml
+                  subPath: openapi-merge.yaml
+                - name: config
+                  mountPath: /etc/openapi-merge-cli/base.json
+                  subPath: base.json
+                - name: output
+                  mountPath: /etc/openapi-merge-cli/output
+                  
+          containers:
+            - name: {{ .Chart.Name }}
+              image: curlimages/curl:7.75.0
+              imagePullPolicy: IfNotPresent
+              command: ['sh', '-c', 'curl -X POST -H "Content-Type: application/json" -d @/etc/openapi-merge-cli/output/output.swagger.json http://$HOST:$PORT/set-api-docs']
+              env:
+                - name: HOST
+                  value: {{ include "wasp-open-api.fullname" . }}
+                - name: PORT
+                  value: {{ .Values.config.servicePort | quote }}
+              volumeMounts:
+                - name: output
+                  mountPath: /etc/openapi-merge-cli/output
+              

@@ -1,25 +1,70 @@
-# wasp-service-template
+# wasp-open-api
 
-Template repository for bootstrapping new WASP services. Use this repo as a template in github when creating new `WASP` services. When forked a new pull request will automatically be created in the new repository to apply templating. Before merging you should also give access to the forked repo the `GITHUB_TOKEN` organisation secret prior to merging. This will allow the release workflow to run successfully on merging.
+Serves a single merged [`OpenAPI`](https://swagger.io/specification/) spec based on any number of wasp OpenAPI specs defined under `paths` in [`values.yaml`](helm/wasp-open-api/values.yaml).
 
-## What this repo provides
+Includes a node service with three endpoints:
+- GET `/api-docs` to access the merged API spec
+- `/swagger` to view the merged API spec in Swagger
+- POST `/set-api-docs` to set the merged API spec
 
-This repo provides:
+The merge is automated via a Helm [`CronJob`](helm/wasp-open-api/templates/cronjob.yaml). that runs [`openapi-merge-cli`](https://www.npmjs.com/package/openapi-merge-cli) then posts the merged doc to `set-api-docs` every minute.
 
-- basic node.js project structure for a WASP service
-- linting with WASP prettier configuration
-- open-sourcing materials
-- Docker file
-- A simple helm chart for the service
-- A service with a healthcheck endpoint on `/health`
-- Testing apparatus using `mocha`, `chai` and `supertest`
-- Github workflows for testing and release
+## Getting started
+
+`wasp-open-api` can be run in a similar way to most nodejs applications. First install required dependencies using `npm`:
+
+```sh
+npm install
+```
+
+And run the application in development mode with:
+
+```sh
+npm run dev
+```
+
+Or run tests with:
+
+```sh
+npm test
+```
 
 ## Environment Variables
 
-`wasp-service-template` is configured primarily using environment variables as follows:
+`wasp-open-api` is configured primarily using environment variables as follows:
 
 | variable  | required | default | description                                                                          |
 | :-------- | :------: | :-----: | :----------------------------------------------------------------------------------- |
 | LOG_LEVEL |    N     | `info`  | Logging level. Valid values are [`trace`, `debug`, `info`, `warn`, `error`, `fatal`] |
 | PORT      |    N     |  `80`   | Port on which the service will listen                                                |
+| API_DOCS_FILE_PATH|   N   |   `./api-docs.json` | Location of the api-docs file on the filesystem |
+
+## Helm/Kubernetes
+
+Install `minikube` and `helm` using Homebrew, then start `minikube` and update helm dependencies:
+```
+brew install minikube helm
+minikube start --vm=true --driver=hyperkit
+minikube addons enable ingress
+helm dependency update helm/wasp-open-api
+```
+
+Eval is required to provide helm with visibility for your local docker image repository:
+```
+eval $(minikube docker-env)
+```
+
+Build the docker image:
+```
+DOCKER_BUILDKIT=1 docker build -t wasp-open-api:latest .
+```
+
+To test the CronJob against mock services on Kubernetes use the `ct-values.yaml`:
+```
+helm install wasp-open-api helm/wasp-open-api -f helm/wasp-open-api/ci/ct-values.yaml
+```
+
+Check the pods are running successfully using:
+```
+kubectl get pods -A
+```

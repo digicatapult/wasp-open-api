@@ -1,11 +1,17 @@
 const express = require('express')
 const pinoHttp = require('pino-http')
+const bodyParser = require('body-parser')
+const swaggerUi = require('swagger-ui-express')
+const fs = require('fs')
 const { PORT } = require('./env')
 const logger = require('./logger')
+const { API_DOCS_FILE_PATH } = require('./env')
 
 async function createHttpServer() {
   const app = express()
   const requestLogger = pinoHttp({ logger })
+
+  app.use(bodyParser.json({ type: 'application/json' }))
 
   app.use((req, res, next) => {
     if (req.path !== '/health') requestLogger(req, res)
@@ -14,6 +20,46 @@ async function createHttpServer() {
 
   app.get('/health', async (req, res) => {
     res.status(200).send({ status: 'ok' })
+  })
+
+  const options = {
+    swaggerOptions: {
+      urls: [
+        {
+          url: `/api-docs`,
+        },
+      ],
+    },
+  }
+
+  app.use(`/swagger`, swaggerUi.serve, swaggerUi.setup(null, options))
+
+  app.post('/set-api-docs', async (req, res) => {
+    // if req.body is missing the user submitted a non-json body
+    if (!req.body || !req.body.openapi || !req.body.info || !req.body.paths) {
+      res.status(400).send({ error: 'must be a valid OpenAPI doc' })
+    } else {
+      fs.writeFile(API_DOCS_FILE_PATH, JSON.stringify(req.body), (err) => {
+        if (err) {
+          res.status(500).send({ error: 'failed to write OpenAPI doc' })
+        } else {
+          res.status(200).send()
+        }
+      })
+    }
+  })
+
+  app.get('/api-docs', async (req, res) => {
+    fs.readFile(API_DOCS_FILE_PATH, (err, data) => {
+      if (err) {
+        res.status(500).send({ error: 'failed to read OpenAPI doc' })
+      } else {
+        fs.stat(API_DOCS_FILE_PATH, (err, stats) => {
+          res.header('Last-Modified', stats.mtime)
+          res.status(200).send(JSON.parse(data))
+        })
+      }
+    })
   })
 
   // Sorry - app.use checks arity
