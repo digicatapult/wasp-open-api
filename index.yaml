@@ -1,0 +1,29 @@
+apiVersion: v1
+entries:
+  wasp-open-api:
+  - apiVersion: v2
+    appVersion: 0.0.5
+    created: "2021-10-25T16:28:28.141213932Z"
+    dependencies:
+    - alias: apidocsmockone
+      condition: apidocsmock.enabled
+      name: nginx
+      repository: https://charts.bitnami.com/bitnami
+      version: ^8.7.1
+    - alias: apidocsmocktwo
+      condition: apidocsmock.enabled
+      name: nginx
+      repository: https://charts.bitnami.com/bitnami
+      version: ^8.7.1
+    description: A Helm chart for wasp-open-api
+    digest: 2c05aa27b71ece54c40a026e5f7c160f7775468061e49f26f8ffadd3334b8ec9
+    maintainers:
+    - email: opensource@digicatapult.org.uk
+      name: digicatapult
+      url: www.digicatapult.org.uk
+    name: wasp-open-api
+    type: application
+    urls:
+    - https://digicatapult.github.io/wasp-open-api/wasp-open-api-0.0.5.tgz
+    version: 0.0.5
+generated: "2021-10-25T16:28:28.135488592Z"
