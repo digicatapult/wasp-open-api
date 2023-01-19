@@ -1,11 +1,13 @@
-const express = require('express')
-const pinoHttp = require('pino-http')
-const bodyParser = require('body-parser')
-const swaggerUi = require('swagger-ui-express')
-const fs = require('fs')
-const { PORT } = require('./env')
-const logger = require('./logger')
-const { API_DOCS_FILE_PATH } = require('./env')
+import express from 'express'
+import pinoHttp from 'pino-http'
+import bodyParser from 'body-parser'
+import swaggerUi from 'swagger-ui-express'
+import fs from 'fs'
+
+import env from './env.js'
+import logger from './logger.js'
+
+const { PORT, API_DOCS_FILE_PATH } = env
 
 async function createHttpServer() {
   const app = express()
@@ -115,9 +117,9 @@ async function startServer() {
     setupGracefulExit({ sigName: 'SIGINT', server, exitCode: 0 })
     setupGracefulExit({ sigName: 'SIGTERM', server, exitCode: 143 })
   } catch (err) {
-    logger.fatal('Fatal error during initialisation: %j', err)
+    logger.fatal('Fatal error during initialisation: %j', err.message || err)
     process.exit(1)
   }
 }
 
-module.exports = { startServer, createHttpServer }
+export { startServer, createHttpServer }
