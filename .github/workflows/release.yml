@@ -91,14 +91,10 @@ jobs:
             ${{ runner.OS }}-
       - name: Install Packages
         run: npm ci
-      - name: Setup dependencies
-        run: docker-compose up -d
       - name: Sleep
         uses: kibertoad/wait-action@1.0.1
         with:
           time: "30s"
-      - name: Initialise DB
-        run: npx knex migrate:latest --env test
       - name: Run tests
         run: npm run test
   check-version:
