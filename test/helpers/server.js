@@ -1,6 +1,6 @@
-const request = require('supertest')
+import request from 'supertest'
 
-const { createHttpServer } = require('../../app/server')
+import { createHttpServer } from '../../app/server.js'
 
 let server = null
 const setupServer = async (context) => {
@@ -10,4 +10,4 @@ const setupServer = async (context) => {
   context.request = request(server.app)
 }
 
-module.exports = { setupServer }
+export { setupServer }
