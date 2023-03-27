@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/wasp-open-api",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Amalgamated API specs for WASP",
   "main": "app/index.js",
   "scripts": {
@@ -48,7 +48,7 @@
     "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
     "pino-colada": "^2.2.2",
-    "prettier": "^2.8.6",
+    "prettier": "^2.8.7",
     "supertest": "^6.3.3"
   }
 }
