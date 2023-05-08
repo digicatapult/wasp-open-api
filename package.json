@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/wasp-open-api",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "Amalgamated API specs for WASP",
   "main": "app/index.js",
   "scripts": {
@@ -35,14 +35,14 @@
     "express": "^4.18.2",
     "pino": "^8.12.1",
     "pino-http": "^8.3.3",
-    "swagger-ui-express": "^4.6.2"
+    "swagger-ui-express": "^4.6.3"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.21.8",
     "c8": "^7.13.0",
     "chai": "^4.3.7",
     "depcheck": "^1.4.3",
-    "eslint": "^8.39.0",
+    "eslint": "^8.40.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "mocha": "^10.2.0",
