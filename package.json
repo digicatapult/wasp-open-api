@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/wasp-open-api",
-  "version": "0.1.32",
+  "version": "0.1.33",
   "description": "Amalgamated API specs for WASP",
   "main": "app/index.js",
   "scripts": {
@@ -43,7 +43,7 @@
     "chai": "^4.3.7",
     "depcheck": "^1.4.3",
     "eslint": "^8.45.0",
-    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-prettier": "^8.9.0",
     "eslint-plugin-prettier": "^4.2.1",
     "mocha": "^10.2.0",
     "nodemon": "^2.0.22",
