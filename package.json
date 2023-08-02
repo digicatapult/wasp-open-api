@@ -1,6 +1,6 @@
 {
   "name": "@digicatapult/wasp-open-api",
-  "version": "0.1.36",
+  "version": "0.1.37",
   "description": "Amalgamated API specs for WASP",
   "main": "app/index.js",
   "scripts": {
@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.22.9",
-    "c8": "^7.14.0",
+    "c8": "^8.0.1",
     "chai": "^4.3.7",
     "depcheck": "^1.4.3",
     "eslint": "^8.46.0",
