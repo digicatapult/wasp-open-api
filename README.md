@@ -1,3 +1,4 @@
+# Deprecated in favour of https://github.com/digicatapult/openapi-merger
 # wasp-open-api
 
 Serves a single merged [`OpenAPI`](https://swagger.io/specification/) spec based on any number of wasp OpenAPI specs defined under `paths` in [`values.yaml`](helm/wasp-open-api/values.yaml).
